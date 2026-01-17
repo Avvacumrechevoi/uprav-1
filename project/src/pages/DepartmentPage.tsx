@@ -206,7 +206,7 @@ export function DepartmentPage() {
 
         <section className="mb-16">
           <div className="bg-gradient-to-br from-blue-900 to-blue-800 rounded-2xl shadow-xl p-12 text-center text-white">
-            <h2 className="text-3xl font-bold mb-4">Присоединиться к направлению</h2>
+            <h2 className="text-3xl font-bold mb-4 text-white">Присоединиться к направлению</h2>
             <p className="text-xl mb-8 text-blue-100 max-w-2xl mx-auto leading-relaxed">
               Дорогу осилит идущий — знающий свою настоящую историю. Оставьте заявку, и мы расскажем, как стать участником исследований.
             </p>
