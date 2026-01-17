@@ -98,6 +98,30 @@ export function RadialMap() {
               style={{ strokeWidth: 'clamp(1px, 0.2vw, 2px)' }}
             />
           ))}
+          {positionedItems.map((item, index) => (
+            <circle
+              key={`pulse-${item?.key}`}
+              r="0.6"
+              fill="#C9A227"
+              opacity="0"
+            >
+              <animateMotion
+                dur="3s"
+                repeatCount="indefinite"
+                path={`M50 50 L ${item?.x} ${item?.y}`}
+                begin={`${index * 0.35}s`}
+                keyTimes="0;1"
+                calcMode="linear"
+              />
+              <animate
+                attributeName="opacity"
+                values="0;1;0"
+                dur="3s"
+                repeatCount="indefinite"
+                begin={`${index * 0.35}s`}
+              />
+            </circle>
+          ))}
         </svg>
 
         {positionedItems.map((item) => (
