@@ -326,10 +326,10 @@ export function InteractiveCircle() {
 
               <button
                 onClick={() => {
-                  const form = document.getElementById('application');
-                  if (form) {
+                  const section = document.getElementById('join');
+                  if (section) {
                     setClickedIndex(null);
-                    form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
                   }
                 }}
                 className={`w-full text-center ${isMobile ? 'text-xs' : 'text-sm'} text-gray-600 hover:text-blue-900 transition-colors duration-200`}

@@ -51,13 +51,7 @@ export function DepartmentPage() {
   ];
 
   const handleJoinClick = () => {
-    navigate('/?section=application&department=neglinka');
-    setTimeout(() => {
-      const form = document.getElementById('application');
-      if (form) {
-        form.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    }, 100);
+    navigate('/?department=neglinka#join');
   };
 
   return (

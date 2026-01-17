@@ -24,14 +24,14 @@ const HowToJoin: React.FC = () => {
   ];
 
   const scrollToForm = () => {
-    const formElement = document.getElementById('application-form');
+    const formElement = document.getElementById('join');
     if (formElement) {
       formElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };
 
   return (
-    <section className="py-24 bg-white">
+    <section id="how-to-join" className="py-24 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-yasna-accent rounded-full mb-6">
