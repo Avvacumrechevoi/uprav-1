@@ -64,6 +64,20 @@
     animation: scale-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
 
+  @keyframes center-breathe {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.015);
+    }
+  }
+
+  .animate-center-breathe {
+    animation: center-breathe 9s ease-in-out infinite;
+    will-change: transform;
+  }
+
   @keyframes float-soft {
     0%, 100% {
       transform: translate3d(0, 0, 0);
@@ -76,5 +90,24 @@
   .animate-float-soft {
     animation: float-soft var(--float-duration, 8s) ease-in-out infinite;
     will-change: transform;
+  }
+
+  @keyframes signal-pulse {
+    0% {
+      opacity: 0;
+      filter: drop-shadow(0 0 0 rgba(201, 162, 39, 0));
+    }
+    50% {
+      opacity: 1;
+      filter: drop-shadow(0 0 6px rgba(201, 162, 39, 0.4));
+    }
+    100% {
+      opacity: 0;
+      filter: drop-shadow(0 0 0 rgba(201, 162, 39, 0));
+    }
+  }
+
+  .animate-signal-pulse {
+    animation: signal-pulse 2.6s ease-in-out;
   }
 }
