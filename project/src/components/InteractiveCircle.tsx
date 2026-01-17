@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { departments } from '../data';
 
 export function InteractiveCircle() {
+  const navigate = useNavigate();
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const [clickedIndex, setClickedIndex] = useState<number | null>(null);
   const [energyParticles, setEnergyParticles] = useState<Array<{id: number, angle: number, progress: number}>>([]);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -21,7 +21,7 @@ export function InteractiveCircle() {
   const iconRadius = isMobile ? 30 : 45;
 
   const angleStep = (2 * Math.PI) / departments.length;
-  const hoverActiveIndex = hoveredIndex !== null ? hoveredIndex : clickedIndex;
+  const hoverActiveIndex = hoveredIndex;
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -130,7 +130,7 @@ export function InteractiveCircle() {
             );
           })}
 
-          {departments.map((_dept, index) => {
+          {departments.map((dept, index) => {
             const angle = index * angleStep - Math.PI / 2;
             const x = centerX + radius * Math.cos(angle);
             const y = centerY + radius * Math.sin(angle);
@@ -197,7 +197,15 @@ export function InteractiveCircle() {
                   filter={isActive ? 'url(#glow)' : ''}
                   onMouseEnter={() => setHoveredIndex(index)}
                   onMouseLeave={() => setHoveredIndex(null)}
-                  onClick={() => setClickedIndex(clickedIndex === index ? null : index)}
+                  onClick={() => navigate(dept.detailsUrl)}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                      event.preventDefault();
+                      navigate(dept.detailsUrl);
+                    }
+                  }}
+                  role="button"
+                  tabIndex={0}
                 />
               </g>
             );
@@ -268,78 +276,6 @@ export function InteractiveCircle() {
 
       </div>
 
-      {clickedIndex !== null && (
-        <div
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in"
-          onClick={() => {
-            setClickedIndex(null);
-          }}
-        >
-          <div
-            className={`bg-white rounded-2xl shadow-2xl relative animate-scale-in ${isMobile ? 'w-full max-w-sm' : 'w-full max-w-md'}`}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className={`${isMobile ? 'p-6' : 'p-8'} relative`}>
-              <button
-                onClick={() => {
-                  setClickedIndex(null);
-                }}
-                className="absolute top-2 right-2 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 transition-colors z-10"
-              >
-                <svg className="w-5 h-5 text-gray-600" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
-                  <path d="M6 18L18 6M6 6l12 12"></path>
-                </svg>
-              </button>
-
-              {departments[clickedIndex].imageUrl && (
-                <div className="mb-6 flex justify-center">
-                  <img
-                    src={departments[clickedIndex].imageUrl}
-                    alt={departments[clickedIndex].name}
-                    className={`${isMobile ? 'w-20 h-20' : 'w-24 h-24'} object-cover rounded-full border-4 border-blue-100 shadow-lg`}
-                  />
-                </div>
-              )}
-
-              <h3 className={`${isMobile ? 'text-xl' : 'text-2xl'} font-bold text-blue-900 mb-4 text-center`}>
-                {departments[clickedIndex].name}
-              </h3>
-
-              <p className={`${isMobile ? 'text-sm' : 'text-base'} text-gray-700 leading-relaxed mb-4 text-center`}>
-                {departments[clickedIndex].shortDescription}
-              </p>
-
-              <div className="mb-6 text-center">
-                <p className={`${isMobile ? 'text-xs' : 'text-sm'} text-gray-600`}>
-                  {departments[clickedIndex].formats}
-                </p>
-              </div>
-
-              {departments[clickedIndex].detailsUrl && (
-                <Link
-                  to={departments[clickedIndex].detailsUrl}
-                  className={`block w-full ${isMobile ? 'py-3 text-sm' : 'py-4 text-base'} bg-blue-900 hover:bg-blue-800 text-white font-semibold rounded-xl transition-all duration-200 hover:shadow-lg text-center mb-4`}
-                >
-                  Подробнее о направлении
-                </Link>
-              )}
-
-              <button
-                onClick={() => {
-                  const section = document.getElementById('join');
-                  if (section) {
-                    setClickedIndex(null);
-                    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                  }
-                }}
-                className={`w-full text-center ${isMobile ? 'text-xs' : 'text-sm'} text-gray-600 hover:text-blue-900 transition-colors duration-200`}
-              >
-                Уже определились? Оставить заявку
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

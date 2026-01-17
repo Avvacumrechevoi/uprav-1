@@ -18,12 +18,14 @@ export function ApplicationForm() {
 
   useEffect(() => {
     const deptParam = searchParams.get('department');
-    if (deptParam === 'neglinka') {
-      setFormData(prev => ({
-        ...prev,
-        departments: ['Неглинка / 38 Меридиан']
-      }));
-    }
+    if (!deptParam) return;
+    const matchedDepartment = departments.find((dept) => dept.slug === deptParam);
+    if (!matchedDepartment) return;
+
+    setFormData(prev => ({
+      ...prev,
+      departments: [matchedDepartment.name]
+    }));
   }, [searchParams]);
 
   const handleCheckboxChange = (deptName: string) => {
@@ -83,7 +85,7 @@ export function ApplicationForm() {
   };
 
   return (
-    <section id="join" className="py-20 px-6 bg-yasna-darkBg">
+    <section id="join" className="py-20 px-6 bg-yasna-darkBg scroll-mt-24">
       <div className="max-w-3xl mx-auto">
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 px-4 py-2 mb-4 text-xs font-sans font-medium tracking-widest-plus text-yasna-accent bg-white/10 rounded-full">

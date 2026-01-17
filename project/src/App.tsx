@@ -4,6 +4,7 @@ import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { HomePage } from './pages/HomePage';
 import { DepartmentPage } from './pages/DepartmentPage';
+import { PrivacyPage } from './pages/PrivacyPage';
 
 function ScrollToHash() {
   const { hash, pathname, search } = useLocation();
@@ -33,7 +34,8 @@ function App() {
         <main>
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/napravleniya/neglinka" element={<DepartmentPage />} />
+            <Route path="/napravleniya/:slug" element={<DepartmentPage />} />
+            <Route path="/privacy" element={<PrivacyPage />} />
           </Routes>
         </main>
         <Footer />

@@ -20,7 +20,7 @@ const pillars = [
 
 export function AboutProject() {
   return (
-    <section id="about" className="py-20 px-6 bg-yasna-warmBg">
+    <section id="about" className="py-20 px-6 bg-yasna-warmBg scroll-mt-24">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 px-4 py-2 mb-6 text-xs font-sans font-medium tracking-widest-plus text-yasna-accent bg-white rounded-full">

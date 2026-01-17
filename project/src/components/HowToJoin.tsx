@@ -31,7 +31,7 @@ const HowToJoin: React.FC = () => {
   };
 
   return (
-    <section id="how-to-join" className="py-24 bg-white">
+    <section id="how-to-join" className="py-24 bg-white scroll-mt-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-yasna-accent rounded-full mb-6">

@@ -2,7 +2,7 @@ import { InteractiveCircle } from './InteractiveCircle';
 
 export function Hero() {
   return (
-    <section id="hero" className="pt-20 md:pt-24 pb-12 md:pb-16 px-4 md:px-6 bg-yasna-lightBg min-h-screen flex items-center">
+    <section id="departments" className="pt-20 md:pt-24 pb-12 md:pb-16 px-4 md:px-6 bg-yasna-lightBg min-h-screen flex items-center scroll-mt-24">
       <div className="max-w-7xl mx-auto w-full">
         <div className="text-center mb-8 md:mb-10">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-normal text-yasna-primary mb-4 md:mb-6 leading-tight px-2">

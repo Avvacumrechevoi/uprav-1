@@ -1,57 +1,64 @@
-import { useNavigate } from 'react-router-dom';
-import { ChevronRight, Globe, ExternalLink } from 'lucide-react';
+import { useMemo } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { ChevronRight, ExternalLink } from 'lucide-react';
+import { departmentDetails, departments } from '../data';
 
 export function DepartmentPage() {
   const navigate = useNavigate();
+  const { slug } = useParams();
+  const department = departments.find((dept) => dept.slug === slug);
 
-  const formats = [
-    {
-      title: 'Исследования',
-      description: 'Изучаем белые пятна истории: названия рек, земель, народов. Работаем с картами, источниками, языком'
-    },
-    {
-      title: 'Статьи и публикации',
-      description: 'Регулярные материалы в Telegram-канале — разборы, находки, открытия'
-    },
-    {
-      title: 'География через язык',
-      description: 'Почему Волга — это Русь, Азия — от реки Аза, а Белоруссия — от Белой Руси'
-    },
-    {
-      title: 'Обсуждения',
-      description: 'Закрытые встречи участников направления — делимся находками, разбираем вопросы'
-    }
-  ];
+  const pageData = useMemo(() => {
+    if (!department) return null;
 
-  const topics = [
-    'Три Руси: Великая Русь (Волга), Малая Русь (Днепр), Белая Русь (Западная Двина)',
-    'Русская география: «белые» и «чёрные» реки, стороны света',
-    'Происхождение названий: Азия, Арья, Манчжурия, Кавказ',
-    'Валдайская возвышенность как исток трёх рек и русского мира',
-    'Топонимика и логика исторического развития'
-  ];
+    const details = departmentDetails[department.slug];
+    const fallbackAbout = [
+      `${department.name} — направление Ясны.`,
+      department.shortDescription,
+      `Форматы участия: ${department.formats}.`
+    ];
 
-  const specialists = [
-    'Картографов',
-    'Геральдистов',
-    'Переводчиков с древних языков',
-    'Астрономов',
-    'Геодезистов',
-    'Архивариусов',
-    'Лингвистов'
-  ];
+    const parsedFormats = department.formats
+      .split('•')
+      .map((format) => format.trim())
+      .filter(Boolean)
+      .map((title) => ({ title }));
 
-  const materials = [
-    '«Волга — не река, а страна. Что скрывают названия»',
-    '«Почему Белое море и Чёрное море так называются»',
-    '«Три Руси: Великая, Малая и Белая — это реки»',
-    '«Азия — от реки Аза. Как Волга дала имя континенту»',
-    '«Манчжурия — это Маныч Восточный»',
-    '«Русская география: восток, запад, чёрная и белая стороны»'
-  ];
+    return {
+      title: details?.title ?? department.name,
+      subtitle: details?.subtitle ?? department.shortDescription,
+      about: details?.about && details.about.length > 0 ? details.about : fallbackAbout,
+      formats: details?.formats && details.formats.length > 0 ? details.formats : parsedFormats,
+      topics: details?.topics ?? [],
+      specialists: details?.specialists ?? [],
+      materials: details?.materials ?? [],
+      resources: details?.resources ?? []
+    };
+  }, [department]);
+
+  if (!department || !pageData) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white flex items-center justify-center px-4">
+        <div className="bg-white p-8 rounded-2xl shadow-lg max-w-lg text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-3">Направление не найдено</h1>
+          <p className="text-gray-600 mb-6">
+            Проверьте ссылку или вернитесь на главную страницу, чтобы выбрать направление.
+          </p>
+          <button
+            onClick={() => navigate('/')}
+            className="px-6 py-3 bg-blue-900 text-white font-semibold rounded-xl hover:bg-blue-800 transition-colors"
+          >
+            На главную
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const hasFormatDescriptions = pageData.formats.some((format) => Boolean(format.description));
 
   const handleJoinClick = () => {
-    navigate('/?department=neglinka#join');
+    navigate(`/?department=${department.slug}#join`);
   };
 
   return (
@@ -64,117 +71,138 @@ export function DepartmentPage() {
           <ChevronRight className="w-4 h-4" />
           <span className="text-gray-400">Направления</span>
           <ChevronRight className="w-4 h-4" />
-          <span className="text-gray-900 font-medium">Неглинка / 38 Меридиан</span>
+          <span className="text-gray-900 font-medium">{department.name}</span>
         </nav>
 
         <div className="text-center mb-16">
           <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-700 rounded-full mb-6 shadow-lg">
-            <Globe className="w-10 h-10 text-white" />
+            <span className="text-4xl text-white">{department.icon}</span>
           </div>
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            Неглинка / ИЦ «38 Меридиан»
+            {pageData.title}
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            Проясняем историю и географию. Формируем образ будущего на основе изучения прошлого.
+            {pageData.subtitle}
           </p>
         </div>
 
         <section className="mb-16">
           <h2 className="text-3xl font-bold text-gray-900 mb-6">О направлении</h2>
           <div className="prose prose-lg max-w-none space-y-6 text-gray-700 leading-relaxed">
-            <p>
-              Исследовательский центр «38 Меридиан» изучает историю и географию методом Ясны — через язык, логику развития и связи между названиями, реками, землями и народами.
-            </p>
-            <p>
-              Для всё большего числа людей очевидно, что в современной научной истории много нестыковок и белых пятен. Особенно неприятно, что в той истории нет нас — русских, таких, в которых мы бы узнали сами себя.
-            </p>
-            <p>
-              Мы исследуем естественный ход развития с давних времён, опираясь на логику исторического развития, сведения разных областей знаний и композицию. Многое уже разгадано, но есть ещё много непознанного и неожиданного.
-            </p>
+            {pageData.about.map((paragraph) => (
+              <p key={paragraph}>{paragraph}</p>
+            ))}
           </div>
         </section>
 
         <section className="mb-16">
           <h2 className="text-3xl font-bold text-gray-900 mb-8">Чем занимаемся</h2>
-          <div className="grid md:grid-cols-2 gap-6">
-            {formats.map((format, index) => (
-              <div key={index} className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">{format.title}</h3>
-                <p className="text-gray-600 leading-relaxed">{format.description}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section className="mb-16">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8">Ключевые темы</h2>
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
-            <ul className="space-y-4">
-              {topics.map((topic, index) => (
-                <li key={index} className="flex items-start">
-                  <span className="inline-block w-2 h-2 bg-blue-600 rounded-full mt-2 mr-4 flex-shrink-0"></span>
-                  <span className="text-gray-700 leading-relaxed">{topic}</span>
-                </li>
+          {hasFormatDescriptions ? (
+            <div className="grid md:grid-cols-2 gap-6">
+              {pageData.formats.map((format, index) => (
+                <div key={`${format.title}-${index}`} className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-3">{format.title}</h3>
+                  {format.description && (
+                    <p className="text-gray-600 leading-relaxed">{format.description}</p>
+                  )}
+                </div>
               ))}
-            </ul>
-          </div>
-        </section>
-
-        <section className="mb-16">
-          <h2 className="text-3xl font-bold text-gray-900 mb-6">Кого ищем в команду</h2>
-          <div className="bg-gradient-to-br from-blue-50 to-blue-100/50 rounded-xl shadow-sm p-8">
-            <p className="text-gray-700 mb-6 leading-relaxed">
-              В центре «38 Меридиан» трудятся специалисты из разных областей. Мы будем рады принять в команду:
-            </p>
+            </div>
+          ) : (
             <div className="flex flex-wrap gap-3">
-              {specialists.map((specialist, index) => (
-                <span key={index} className="px-4 py-2 bg-white text-gray-800 rounded-full shadow-sm border border-gray-200 font-medium">
-                  {specialist}
+              {pageData.formats.map((format, index) => (
+                <span key={`${format.title}-${index}`} className="px-4 py-2 bg-white text-gray-800 rounded-full shadow-sm border border-gray-200 font-medium">
+                  {format.title}
                 </span>
               ))}
             </div>
-          </div>
+          )}
         </section>
 
-        <section className="mb-16">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8">Материалы направления</h2>
-          <div className="grid md:grid-cols-2 gap-4 mb-6">
-            {materials.map((material, index) => (
-              <div key={index} className="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:border-blue-200 hover:shadow-md transition-all cursor-pointer group">
-                <p className="text-gray-800 group-hover:text-blue-900 transition-colors leading-relaxed">{material}</p>
-              </div>
-            ))}
-          </div>
-          <a
-            href="https://t.me/neglinka78"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center text-blue-900 hover:text-blue-700 font-semibold transition-colors"
-          >
-            Все материалы
-            <ChevronRight className="w-5 h-5 ml-1" />
-          </a>
-        </section>
+        {pageData.topics.length > 0 && (
+          <section className="mb-16">
+            <h2 className="text-3xl font-bold text-gray-900 mb-8">Ключевые темы</h2>
+            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
+              <ul className="space-y-4">
+                {pageData.topics.map((topic, index) => (
+                  <li key={`${topic}-${index}`} className="flex items-start">
+                    <span className="inline-block w-2 h-2 bg-blue-600 rounded-full mt-2 mr-4 flex-shrink-0"></span>
+                    <span className="text-gray-700 leading-relaxed">{topic}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </section>
+        )}
 
-        <section className="mb-16">
-          <h2 className="text-3xl font-bold text-gray-900 mb-6">Ресурсы</h2>
-          <a
-            href="https://t.me/neglinka78"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center px-6 py-4 bg-white border border-gray-200 rounded-xl hover:border-blue-300 hover:shadow-md transition-all group"
-          >
-            <div className="flex items-center space-x-3">
-              <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center">
-                <ExternalLink className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <div className="text-sm text-gray-600 mb-1">Telegram</div>
-                <div className="font-semibold text-gray-900 group-hover:text-blue-900">t.me/neglinka78</div>
+        {pageData.specialists.length > 0 && (
+          <section className="mb-16">
+            <h2 className="text-3xl font-bold text-gray-900 mb-6">Кого ищем в команду</h2>
+            <div className="bg-gradient-to-br from-blue-50 to-blue-100/50 rounded-xl shadow-sm p-8">
+              <p className="text-gray-700 mb-6 leading-relaxed">
+                В команде направления есть место специалистам из разных областей. Мы будем рады принять:
+              </p>
+              <div className="flex flex-wrap gap-3">
+                {pageData.specialists.map((specialist, index) => (
+                  <span key={`${specialist}-${index}`} className="px-4 py-2 bg-white text-gray-800 rounded-full shadow-sm border border-gray-200 font-medium">
+                    {specialist}
+                  </span>
+                ))}
               </div>
             </div>
-          </a>
-        </section>
+          </section>
+        )}
+
+        {pageData.materials.length > 0 && (
+          <section className="mb-16">
+            <h2 className="text-3xl font-bold text-gray-900 mb-8">Материалы направления</h2>
+            <div className="grid md:grid-cols-2 gap-4 mb-6">
+              {pageData.materials.map((material, index) => (
+                <div key={`${material}-${index}`} className="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:border-blue-200 hover:shadow-md transition-all cursor-pointer group">
+                  <p className="text-gray-800 group-hover:text-blue-900 transition-colors leading-relaxed">{material}</p>
+                </div>
+              ))}
+            </div>
+            {pageData.resources.length > 0 && (
+              <a
+                href={pageData.resources[0].url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center text-blue-900 hover:text-blue-700 font-semibold transition-colors"
+              >
+                Все материалы
+                <ChevronRight className="w-5 h-5 ml-1" />
+              </a>
+            )}
+          </section>
+        )}
+
+        {pageData.resources.length > 0 && (
+          <section className="mb-16">
+            <h2 className="text-3xl font-bold text-gray-900 mb-6">Ресурсы</h2>
+            <div className="flex flex-col gap-4">
+              {pageData.resources.map((resource) => (
+                <a
+                  key={resource.url}
+                  href={resource.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center px-6 py-4 bg-white border border-gray-200 rounded-xl hover:border-blue-300 hover:shadow-md transition-all group"
+                >
+                  <div className="flex items-center space-x-3">
+                    <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center">
+                      <ExternalLink className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <div className="text-sm text-gray-600 mb-1">{resource.label}</div>
+                      <div className="font-semibold text-gray-900 group-hover:text-blue-900">{resource.url.replace('https://', '')}</div>
+                    </div>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </section>
+        )}
 
         <section className="mb-16">
           <div className="bg-gradient-to-br from-blue-900 to-blue-800 rounded-2xl shadow-xl p-12 text-center text-white">
