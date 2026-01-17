@@ -64,12 +64,12 @@ export function DepartmentPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <nav className="flex items-center space-x-2 text-sm text-gray-600 mb-12">
+        <nav className="flex items-center space-x-2 text-sm text-gray-700 mb-12">
           <button onClick={() => navigate('/')} className="hover:text-blue-900 transition-colors">
             Главная
           </button>
           <ChevronRight className="w-4 h-4" />
-          <span className="text-gray-400">Направления</span>
+          <span className="text-gray-500">Направления</span>
           <ChevronRight className="w-4 h-4" />
           <span className="text-gray-900 font-medium">{department.name}</span>
         </nav>

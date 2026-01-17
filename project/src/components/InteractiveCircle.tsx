@@ -247,8 +247,8 @@ export function InteractiveCircle() {
                 </div>
               )}
               <div
-                className={`mt-2 text-center font-sans ${isMobile ? 'text-[10px]' : 'text-xs'} ${
-                  isActive ? 'text-blue-900' : 'text-gray-600'
+                className={`mt-2 text-center font-sans ${isMobile ? 'text-xs' : 'text-sm'} ${
+                  isActive ? 'text-yasna-primary' : 'text-yasna-textPrimary'
                 }`}
               >
                 {dept.shortLabel}
