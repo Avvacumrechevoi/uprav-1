@@ -1,4 +1,4 @@
-import { InteractiveCircle } from './InteractiveCircle';
+import { RadialMap } from './RadialMap';
 
 export function Hero() {
   return (
@@ -9,12 +9,12 @@ export function Hero() {
             Выберите направление — и станьте частью команды
           </h1>
           <p className="text-base md:text-lg lg:text-xl text-yasna-textPrimary max-w-3xl mx-auto leading-relaxed px-4">
-            9 направлений: история, язык, литература, здоровье, астрономия, архитектура, праздники, путешествия, обучение. Найдите своё.
+            8 направлений: история, язык, литература, здоровье, астрономия, праздники, путешествия, обучение. Найдите своё.
           </p>
         </div>
 
         <div className="mb-8 md:mb-12">
-          <InteractiveCircle />
+          <RadialMap />
         </div>
 
         <div className="text-center mb-8 md:mb-12">
