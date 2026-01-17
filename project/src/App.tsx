@@ -26,8 +26,13 @@ function ScrollToHash() {
 }
 
 function App() {
+  const baseUrl = import.meta.env.BASE_URL;
+  const baseName = typeof window === 'undefined'
+    ? baseUrl
+    : new URL(baseUrl, window.location.origin).pathname;
+
   return (
-    <Router>
+    <Router basename={baseName}>
       <div className="min-h-screen bg-white">
         <ScrollToHash />
         <Header />
