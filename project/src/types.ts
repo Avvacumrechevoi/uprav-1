@@ -1,6 +1,7 @@
 export interface Department {
   name: string;
   slug: string;
+  shortLabel: string;
   icon: string;
   shortDescription: string;
   formats: string;

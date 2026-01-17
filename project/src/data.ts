@@ -4,6 +4,7 @@ export const departments: Department[] = [
   {
     name: 'Неглинка / 38 Меридиан',
     slug: 'neglinka',
+    shortLabel: 'Неглинка',
     icon: '◈',
     shortDescription: 'Исследуем историю и географию, собираем целостную картину прошлого. Для тех, кто хочет понимать, а не просто знать.',
     formats: 'исследования • статьи • обсуждения • архивы',
@@ -13,6 +14,7 @@ export const departments: Department[] = [
   {
     name: 'Извод',
     slug: 'izvod',
+    shortLabel: 'Извод',
     icon: '◇',
     shortDescription: 'Глубинные смыслы слов и событий. Очевидное становится видимым, когда смотришь внимательно.',
     formats: 'статьи-исследования • смысловые разборы • длинные тексты',
@@ -22,6 +24,7 @@ export const departments: Department[] = [
   {
     name: 'ЛитПроСвет',
     slug: 'litprosvet',
+    shortLabel: 'ЛитПроСвет',
     icon: '❧',
     shortDescription: 'Солнечная сторона литературы. Учимся видеть ценности, композицию и язык в текстах — и писать свои.',
     formats: 'читательский клуб • курсы письма • разборы • литературные игры',
@@ -31,6 +34,7 @@ export const departments: Department[] = [
   {
     name: 'Астроневод',
     slug: 'astronevod',
+    shortLabel: 'Астроневод',
     icon: '☆',
     shortDescription: 'Космос и циклы времени. Астрономия на стыке науки и смысла — для тех, кто смотрит на небо с вопросами.',
     formats: 'исследования • статьи • наблюдения • разборы',
@@ -40,6 +44,7 @@ export const departments: Department[] = [
   {
     name: 'Джива',
     slug: 'jiva',
+    shortLabel: 'Джива',
     icon: '❋',
     shortDescription: 'Здоровье как живая система. Ритмы, дыхание, сила жизни — целостный взгляд на тело и здоровье.',
     formats: 'практики • исследования • просвещение',
@@ -49,6 +54,7 @@ export const departments: Department[] = [
   {
     name: 'Праздники Словены Ясны',
     slug: 'prazdniki',
+    shortLabel: 'Праздники',
     icon: '✧',
     shortDescription: 'Красота как мера. Возвращаем праздники, обряды и встречи — годовой круг, который наполняет жизнь смыслом.',
     formats: 'праздники • балы • встречи • годовой круг',
@@ -58,6 +64,7 @@ export const departments: Department[] = [
   {
     name: 'Ясные маршруты',
     slug: 'yasnye-marshruty',
+    shortLabel: 'Маршруты',
     icon: '↗',
     shortDescription: 'Натурные уроки. Москва, Петербург, города России — путешествия, в которых пространство становится учителем.',
     formats: 'прогулки • экскурсии • квесты • поездки',
@@ -67,6 +74,7 @@ export const departments: Department[] = [
   {
     name: 'Ясна-Школа',
     slug: 'yasna-shkola',
+    shortLabel: 'Школа',
     icon: '▣',
     shortDescription: 'Обучение для тех, кто хочет глубже. Курсы, практикумы и подготовка к работе в любом направлении Ясны.',
     formats: 'курсы • семинары • практикумы • встречи',
@@ -76,6 +84,7 @@ export const departments: Department[] = [
   {
     name: 'Ясна. Архитектура',
     slug: 'yasna-architecture',
+    shortLabel: 'Архитектура',
     icon: '△',
     shortDescription: 'Пространство как язык. Формы, города, символы — читаем архитектуру как текст о человеке и культуре.',
     formats: 'исследования • разборы • экскурсии • статьи',

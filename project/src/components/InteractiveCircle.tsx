@@ -246,6 +246,13 @@ export function InteractiveCircle() {
                   {dept.icon}
                 </div>
               )}
+              <div
+                className={`mt-2 text-center font-sans ${isMobile ? 'text-[10px]' : 'text-xs'} ${
+                  isActive ? 'text-blue-900' : 'text-gray-600'
+                }`}
+              >
+                {dept.shortLabel}
+              </div>
             </div>
           );
         })}
