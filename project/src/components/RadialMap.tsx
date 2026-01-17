@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, type CSSProperties } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { departments } from '../data';
 
@@ -21,6 +21,7 @@ const RADIAL_ITEMS: RadialItemConfig[] = [
 export function RadialMap() {
   const navigate = useNavigate();
   const [viewport, setViewport] = useState({ isMobile: false, isTablet: false });
+  const [hoveredKey, setHoveredKey] = useState<string | null>(null);
 
   useEffect(() => {
     const updateViewport = () => {
@@ -36,15 +37,13 @@ export function RadialMap() {
     return () => window.removeEventListener('resize', updateViewport);
   }, []);
 
-  const radiusPercent = viewport.isMobile ? 30 : viewport.isTablet ? 34 : 38;
-  const outerSize = viewport.isMobile
-    ? 'clamp(56px, 16vw, 76px)'
-    : viewport.isTablet
-      ? 'clamp(60px, 12vw, 88px)'
-      : 'clamp(64px, 10vw, 96px)';
-  const outerBorder = viewport.isMobile ? 'clamp(1px, 0.35vw, 2px)' : 'clamp(1px, 0.25vw, 2px)';
-  const centerSize = 'clamp(140px, 20vw, 220px)';
-  const centerBorder = 'clamp(2px, 0.4vw, 3px)';
+  const radiusPercent = viewport.isMobile ? 42 : viewport.isTablet ? 44 : 48;
+  const outerSize = 'clamp(70px, 9vw, 92px)';
+  const outerBorder = 'clamp(1px, 0.2vw, 2px)';
+  const centerSize = 'clamp(200px, 22vw, 300px)';
+  const centerBorder = 'clamp(2px, 0.35vw, 3px)';
+  const baseLineColor = 'rgba(30, 58, 95, 0.2)';
+  const activeLineColor = 'rgba(201, 162, 39, 0.8)';
 
   const itemBySlug = useMemo(() => new Map(departments.map((dept) => [dept.slug, dept])), []);
 
@@ -79,53 +78,43 @@ export function RadialMap() {
     <div className="w-full">
       <div
         className="relative mx-auto aspect-square overflow-visible"
-        style={{ width: 'min(900px, 90vw, 60vh)' }}
+        style={{ width: 'min(820px, 90vw)' }}
       >
         <svg
           className="absolute inset-0 h-full w-full overflow-visible"
           viewBox="0 0 100 100"
           aria-hidden="true"
         >
-          {positionedItems.map((item) => (
-            <line
-              key={`line-${item?.key}`}
-              x1="50"
-              y1="50"
-              x2={item?.x}
-              y2={item?.y}
-              stroke="rgba(30, 58, 95, 0.25)"
-              strokeLinecap="round"
-              vectorEffect="non-scaling-stroke"
-              style={{ strokeWidth: 'clamp(1px, 0.2vw, 2px)' }}
-            />
-          ))}
-          {positionedItems.map((item, index) => (
-            <circle
-              key={`pulse-${item?.key}`}
-              r="0.6"
-              fill="#C9A227"
-              opacity="0"
-            >
-              <animateMotion
-                dur="3s"
-                repeatCount="indefinite"
-                path={`M50 50 L ${item?.x} ${item?.y}`}
-                begin={`${index * 0.35}s`}
-                keyTimes="0;1"
-                calcMode="linear"
+          {positionedItems.map((item) => {
+            const isActive = hoveredKey === item?.key;
+
+            return (
+              <line
+                key={`line-${item?.key}`}
+                x1="50"
+                y1="50"
+                x2={item?.x}
+                y2={item?.y}
+                stroke={isActive ? activeLineColor : baseLineColor}
+                strokeLinecap="round"
+                vectorEffect="non-scaling-stroke"
+                style={{ strokeWidth: '1px', strokeOpacity: isActive ? 1 : 0.6 }}
               />
-              <animate
-                attributeName="opacity"
-                values="0;1;0"
-                dur="3s"
-                repeatCount="indefinite"
-                begin={`${index * 0.35}s`}
-              />
-            </circle>
-          ))}
+            );
+          })}
         </svg>
 
-        {positionedItems.map((item) => (
+        {positionedItems.map((item, index) => {
+          const floatOffset = -(3 + (index % 4));
+          const floatDuration = 7 + (index % 4);
+          const floatDelay = index * 0.35;
+          const floatStyle = {
+            '--float-y': `${floatOffset}px`,
+            '--float-duration': `${floatDuration}s`,
+            animationDelay: `${floatDelay}s`
+          } as CSSProperties;
+
+          return (
           <div
             key={item?.key}
             className="absolute overflow-visible"
@@ -135,43 +124,58 @@ export function RadialMap() {
               transform: 'translate(-50%, -50%)'
             }}
           >
-            <button
-              type="button"
-              onClick={() => item?.href && navigate(item.href)}
-              className="group relative flex items-center justify-center rounded-full border border-yasna-primary bg-white shadow-yasna transition-transform duration-200 hover:scale-[1.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yasna-accent"
-              style={{
-                width: outerSize,
-                height: outerSize,
-                borderWidth: outerBorder
-              }}
+            <div
+              className="relative animate-float-soft motion-reduce:animate-none"
+              style={floatStyle}
             >
-              {item?.imageUrl ? (
-                <img
-                  src={item.imageUrl}
-                  alt={item.label}
-                  className="max-h-[70%] max-w-[70%] object-contain"
-                />
-              ) : (
-                <span
-                  className="leading-none text-yasna-primary"
-                  style={{ fontSize: 'clamp(24px, 4vw, 40px)' }}
-                >
-                  {item?.icon}
-                </span>
-              )}
-              <span className="sr-only">{item?.label}</span>
+              <button
+                type="button"
+                onClick={() => item?.href && navigate(item.href)}
+                onMouseEnter={() => setHoveredKey(item?.key ?? null)}
+                onMouseLeave={() => setHoveredKey(null)}
+                onFocus={() => setHoveredKey(item?.key ?? null)}
+                onBlur={() => setHoveredKey(null)}
+                className="group relative flex items-center justify-center rounded-full border border-yasna-primary bg-white shadow-sm transition-transform duration-300 hover:scale-[1.05] hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yasna-accent"
+                style={{
+                  width: outerSize,
+                  height: outerSize,
+                  borderWidth: outerBorder
+                }}
+              >
+                {item?.imageUrl ? (
+                  <img
+                    src={item.imageUrl}
+                    alt={item.label}
+                    className="max-h-[70%] max-w-[70%] object-contain"
+                  />
+                ) : (
+                  <span
+                    className="leading-none text-yasna-primary"
+                    style={{ fontSize: 'clamp(24px, 4vw, 40px)' }}
+                  >
+                    {item?.icon}
+                  </span>
+                )}
+                <span className="sr-only">{item?.label}</span>
+              </button>
               <span
-                className="absolute left-1/2 top-full mt-2 hidden max-w-[120px] -translate-x-1/2 text-balance text-center text-yasna-textPrimary sm:block"
-                style={{ fontSize: 'clamp(11px, 1.8vw, 14px)', lineHeight: '1.2' }}
+                className="absolute left-1/2 top-full hidden max-w-[140px] -translate-x-1/2 text-center text-yasna-textPrimary sm:block"
+                style={{
+                  marginTop: 'clamp(10px, 1.6vw, 14px)',
+                  fontSize: 'clamp(12px, 1.6vw, 14px)',
+                  lineHeight: '1.2',
+                  textWrap: 'balance'
+                } as CSSProperties}
               >
                 {item?.label}
               </span>
-            </button>
+            </div>
           </div>
-        ))}
+        );
+        })}
 
         <div
-          className="absolute left-1/2 top-1/2 flex items-center justify-center rounded-full border border-yasna-primary bg-white shadow-yasna"
+          className="absolute left-1/2 top-1/2 flex items-center justify-center rounded-full border border-yasna-primary bg-white shadow-md"
           style={{
             width: centerSize,
             height: centerSize,
@@ -180,8 +184,8 @@ export function RadialMap() {
           }}
         >
           <span
-            className="font-serif text-yasna-primary leading-none"
-            style={{ fontSize: 'clamp(28px, 4vw, 48px)' }}
+            className="font-serif text-yasna-primary leading-none tracking-[0.04em]"
+            style={{ fontSize: 'clamp(28px, 3vw, 40px)' }}
           >
             Ясна
           </span>
