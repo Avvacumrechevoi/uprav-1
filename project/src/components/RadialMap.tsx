@@ -78,7 +78,8 @@ export function RadialMap() {
   return (
     <div className="w-full">
       <div
-        className="relative mx-auto aspect-square w-[min(900px,90vw)] max-w-[900px] overflow-visible"
+        className="relative mx-auto aspect-square overflow-visible"
+        style={{ width: 'min(900px, 90vw, 60vh)' }}
       >
         <svg
           className="absolute inset-0 h-full w-full overflow-visible"
