@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { supabase } from '../lib/supabase';
+import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import { departments } from '../data';
 import { CheckCircle2, AlertCircle } from 'lucide-react';
 
@@ -39,6 +39,12 @@ export function ApplicationForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!isSupabaseConfigured || !supabase) {
+      setSubmitStatus('error');
+      setErrorMessage('Форма временно недоступна. Попробуйте позже.');
+      return;
+    }
 
     if (!formData.name || !formData.contact) {
       setSubmitStatus('error');
@@ -170,6 +176,13 @@ export function ApplicationForm() {
               />
             </div>
 
+            {!isSupabaseConfigured && (
+              <div className="flex items-center space-x-2 p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-yellow-900">
+                <AlertCircle className="w-5 h-5 flex-shrink-0" />
+                <p className="text-sm">Форма временно недоступна. Попробуйте позже.</p>
+              </div>
+            )}
+
             {submitStatus === 'success' && (
               <div className="flex items-center space-x-2 p-4 bg-green-50 border border-green-200 rounded-lg text-green-800">
                 <CheckCircle2 className="w-5 h-5 flex-shrink-0" />
@@ -186,10 +199,10 @@ export function ApplicationForm() {
 
             <button
               type="submit"
-              disabled={isSubmitting}
+              disabled={isSubmitting || !isSupabaseConfigured}
               className="w-full py-4 bg-yasna-primary hover:bg-yasna-accent text-white font-sans font-semibold tracking-wide rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isSubmitting ? 'ОТПРАВКА...' : 'ОТПРАВИТЬ ЗАЯВКУ'}
+              {!isSupabaseConfigured ? 'ФОРМА НЕДОСТУПНА' : isSubmitting ? 'ОТПРАВКА...' : 'ОТПРАВИТЬ ЗАЯВКУ'}
             </button>
           </div>
         </form>
