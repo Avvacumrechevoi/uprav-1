@@ -525,12 +525,6 @@ export function RadialMap() {
               aria-hidden="true"
             />
           </div>
-          <div
-            className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-yasna-primary/40"
-            style={{ fontSize: 'clamp(18px, 2vw, 24px)', letterSpacing: '0.18em' }}
-          >
-            Ясна
-          </div>
         </div>
       </div>
 
