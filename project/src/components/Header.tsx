@@ -6,7 +6,7 @@ export function Header() {
       <div className="max-w-7xl mx-auto px-4 md:px-6 py-3 md:py-4">
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center space-x-2 md:space-x-3 cursor-pointer group">
-            <div className="text-2xl md:text-3xl font-serif font-normal text-yasna-primary tracking-wide group-hover:text-yasna-accent transition-colors">Ясна</div>
+            <div className="text-2xl md:text-3xl font-serif font-normal text-yasna-primary tracking-wide group-hover:text-yasna-accent transition-colors">Русская Ясна</div>
             <div className="text-gray-300 text-xl md:text-2xl">|</div>
             <div className="flex flex-col">
               <div className="text-xs md:text-sm text-yasna-textMuted font-sans tracking-wide leading-tight">
