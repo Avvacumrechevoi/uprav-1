@@ -58,7 +58,7 @@ export function DepartmentPage() {
   const hasFormatDescriptions = pageData.formats.some((format) => Boolean(format.description));
 
   const handleJoinClick = () => {
-    navigate(`/?department=${department.slug}#join`);
+    navigate(`/join?direction=${department.slug}#join`);
   };
 
   return (

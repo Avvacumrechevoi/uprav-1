@@ -40,6 +40,8 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/napravleniya/:slug" element={<DepartmentPage />} />
+            <Route path="/directions/:slug" element={<DepartmentPage />} />
+            <Route path="/join" element={<HomePage />} />
             <Route path="/privacy" element={<PrivacyPage />} />
           </Routes>
         </main>

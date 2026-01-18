@@ -294,10 +294,8 @@ export function RadialMap() {
   }, [prefersReducedMotion]);
 
   const radiusPercent = viewport.isMobile ? 30 : viewport.isTablet ? 32 : 34;
-  const centerDiameter = desiredSize * 0.42;
-  const outerDiameter = desiredSize * 0.15;
+  const outerDiameter = clamp(72, desiredSize * 0.15, 92);
   const outerBorder = 2;
-  const centerBorder = 3;
 
   const departmentMap = useMemo(
     () => new Map(departments.map((dept) => [dept.slug, dept])),
@@ -353,7 +351,7 @@ export function RadialMap() {
       <div
         ref={containerRef}
         className="relative mx-auto w-[min(820px,90vw)] overflow-visible"
-        style={{ height: 'min(62vh, 640px)', minHeight: '420px', maxWidth: '860px' }}
+        style={{ height: 'min(58vh, 620px)', minHeight: '420px', maxWidth: '860px' }}
       >
         <div className="absolute left-1/2 top-1/2" style={mapStyle}>
           <svg
@@ -373,7 +371,7 @@ export function RadialMap() {
               cy="50"
               r={radiusPercent}
               fill="none"
-              stroke="rgba(30, 58, 95, 0.12)"
+              stroke="rgba(30, 58, 95, 0.14)"
               strokeWidth="1"
             />
             {items.map((item) => {
@@ -385,7 +383,7 @@ export function RadialMap() {
                     y1="50"
                     x2={item.x}
                     y2={item.y}
-                    stroke={isActive ? 'rgba(201, 162, 39, 0.85)' : 'rgba(30, 58, 95, 0.22)'}
+                    stroke={isActive ? 'rgba(201, 162, 39, 0.85)' : 'rgba(30, 58, 95, 0.18)'}
                     strokeLinecap="round"
                     vectorEffect="non-scaling-stroke"
                     style={{ strokeWidth: isActive ? 1.5 : 1 }}
@@ -518,19 +516,20 @@ export function RadialMap() {
           })}
 
           <div
-            className={`absolute left-1/2 top-1/2 flex items-center justify-center rounded-full border bg-white shadow-md ${
-              prefersReducedMotion ? '' : 'animate-center-breathe motion-reduce:animate-none'
-            }`}
-            style={{
-              width: `${centerDiameter}px`,
-              height: `${centerDiameter}px`,
-              borderWidth: `${centerBorder}px`,
-              transform: 'translate(-50%, -50%)'
-            }}
+            className="absolute left-1/2 top-1/2 flex items-center justify-center"
+            style={{ transform: 'translate(-50%, -50%)' }}
           >
-            <span className="font-serif text-yasna-primary tracking-[0.08em]" style={{ fontSize: 'clamp(28px, 3vw, 40px)' }}>
-              Ясна
-            </span>
+            <div
+              className="rounded-full bg-yasna-primary opacity-45"
+              style={{ width: 'clamp(10px, 1.2vw, 14px)', height: 'clamp(10px, 1.2vw, 14px)' }}
+              aria-hidden="true"
+            />
+          </div>
+          <div
+            className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-yasna-primary/40"
+            style={{ fontSize: 'clamp(18px, 2vw, 24px)', letterSpacing: '0.18em' }}
+          >
+            Ясна
           </div>
         </div>
       </div>
@@ -562,8 +561,8 @@ export function RadialMap() {
           setActiveSlug(null);
           setHoveredSlug(null);
         }}
-        onDetails={(slug) => navigate(`/napravleniya/${slug}`)}
-        onJoin={(slug) => navigate(`/?department=${slug}#join`)}
+        onDetails={(slug) => navigate(`/directions/${slug}`)}
+        onJoin={(slug) => navigate(`/join?direction=${slug}#join`)}
       />
     </div>
   );

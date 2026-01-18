@@ -17,7 +17,7 @@ export function ApplicationForm() {
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    const deptParam = searchParams.get('department');
+    const deptParam = searchParams.get('direction') ?? searchParams.get('department');
     if (!deptParam) return;
     const matchedDepartment = departments.find((dept) => dept.slug === deptParam);
     if (!matchedDepartment) return;
